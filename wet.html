@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Small Projects</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./src/output.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+
+    <nav class="flex items-center justify-between px-6 py-4 bg-gray-700 text-white">
+        <a href="index.html" class="text-2xl font-bold">My projects</a>
+        <div class="flex gap-6">
+            <a href="/cal.html" class="cursor-pointer hover:text-blue-400">Calculator</a>
+            <a href="/wet.html" class="cursor-pointer hover:text-blue-400">Weather</a>
+        </div>
+    </nav>
+
+    <!-- Weather section -->
+
+    <main
+        class="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-500 via-indigo-500 to-purple-600 p-5">
+        <!-- search bar -->
+        <div class="w-full max-w-md bg-white/20 backdrop-blur-xl rounded-3xl border border-white/30 shadow-2xl p-6">
+            <div class="flex gap-3">
+
+                <input type="text" id="cityInput" placeholder="search city..."
+                    class="flex-1 px-5 py-3 rounded-full outline-none text-gray-700 text-lg">
+
+                <button id="searchBtn"
+                    class="w-14 h-14 rounded-full bg-white hover:bg-sky-500 hover:text-white transition">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+            <!-- weather -->
+
+            <p id="error"
+             class="hidden text-center text-red-300 mt-4">
+                City Not Found
+            </p>
+            <div id="weatherBox" class="hidden">
+                <div class="flex justify-center mt-8">
+
+                    <img src="https://cdn-icons-png.flaticon.com/512/1779/1779940.png"
+ alt="Weather icon"
+                        id="weatherIcon" class="w-36 h-36">
+                </div>
+
+                <h1 id="temperature" class="text-center text-6xl  text-white mt-2">
+                    --℃
+                </h1>
+
+                <h2 id="cityName" class="text-center text-3xl font-semibold text-white mt-2">
+                </h2>
+
+                <p id="weatherType" class="text-center text-xl text-white/90 mt-2">
+                    Clouds
+                </p>
+
+                <!-- info -->
+
+                <div class="grid grid-cols-2 gap-5 mt-10">
+
+                    <div class="bg-white/20 rounded-2xl p-4 text-center">
+                        <i class="fa-solid fa-droplet text-3xl text-cyan-300"></i>
+
+                        <p class="text-white mt-2">Humidity</p>
+
+                        <h3 id="humidity" class=" text-white
+                        text-2xl font-bold">
+                            0%
+                        </h3>
+                    </div>
+                    <div class="bg-white/20 rounded-2xl p-4 text-center">
+                        <i class="fa-solid fa-wind text-3xl text-green-300"></i>
+                        <p class="text-white mt-2">
+                            Wind
+                        </p>
+                        <h3 id="wind" class="text-white text-2xl font-bold">
+                            0 km/h
+                        </h3>
+                    </div>
+
+                    <div class="bg-white/20 rounded-2xl p-4 text-center">
+                        <i class="fa-solid fa-eye text-3xl text-yellow-300"></i>
+                        <p class="text-white mt-2">
+                            visibility
+                        </p>
+                        <h3 id="visibility" class="text-white text-2xl font-bold">
+                            0 km
+                        </h3>
+                    </div>
+                    <div class="bg-white/20 rounded-2xl text-center">
+                        <i class="fa-solid fa-temperature-three-quarters text-3xl text-red-300"></i>
+                        <p class="text-white mt-2">
+                            Feels Like
+                        </p>
+                        <h3 class="text-white text-2xl font-bold" id="feelsLike">
+                            0℃
+                        </h3>
+                    </div>
+
+                </div>
+
+                <!-- Data and Time -->
+
+                <div class="mt-8 bg-white/20 rounded-2xl p-4 text-center">
+                    <h3 id="todayDate" class="text-white text-xl font-semibold"></h3>
+                    <p id="liveTime" class="text-white mt-2 text-lg"></p>
+                </div>
+
+                <!-- sunrise and Sunset -->
+                <div class="grid grid-cols-2 gap-5 mt-5">
+                    <div class="bg-white/20 rounded-2xl p-4 text-center">
+                        <i class="fa-solid fa-sun text-yellow-300 text-3xl"></i>
+                        <p class="text-white mt-2">
+                            Sunrise
+                        </p>
+                        <h3 id="sunrise" class="text-white text-xl font-bold"></h3>
+                    </div>
+
+                    <div class="bg-white/20 rounded-2xl p-4 text-center">
+                        <i class="fa-solid fa-moon text-blue-300 text-3xl"></i>
+                        <p class="text-white mt-2">sunset</p>
+                        <h3 id="sunset" class="text-white text-xl font-bold"></h3>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+
+    <!-- Script section -->
+    <script>
+
+        //  api key section
+        const apiKey = "afbc1667ad430f337cae90b44deb5796";
+
+        // Target Elements
+        const cityInput = document.getElementById("cityInput");
+        const searchBtn = document.getElementById("searchBtn");
+
+
+        const weatherBox = document.getElementById("weatherBox");
+        const error = document.getElementById("error");
+
+
+        const cityName = document.getElementById("cityName");
+        const temperature = document.getElementById("temperature");
+        const weatherType = document.getElementById("weatherType");
+        const humidity = document.getElementById("humidity");
+        const wind = document.getElementById("wind");
+        const visibility = document.getElementById("visibility");
+        const feelsLike = document.getElementById("feelsLike");
+        const weatherIcon = document.getElementById("weatherIcon");
+
+        // Get weather
+
+        async function getWeather(city) {
+            const url =
+                `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error("City Not Found");
+                }
+                const data = await response.json();
+                error.classList.add("hidden");
+                weatherBox.classList.remove("hidden");
+
+                cityName.innerText = data.name;
+                temperature.innerText = Math.round(data.main.temp) + "℃";
+                weatherType.innerText = data.weather[0].main;
+
+                humidity.innerText =
+                    data.main.humidity + "%";
+
+                wind.innerText
+                    = data.wind.speed + " km/h";
+
+                visibility.innerText = (data.visibility / 1000).toFixed(1) + " km";
+
+                feelsLike.innerText =
+                    Math.round(data.main.feels_like) + "℃";
+
+                const sunriseTime = new Date(data.sys.sunrise * 1000);
+
+                const sunsetTime = new Date(data.sys.sunset * 1000);
+
+                sunrise.innerText = sunriseTime.toLocaleTimeString([],
+                    {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    });
+
+                     sunset.innerText = sunsetTime.toLocaleTimeString([],
+                    {
+                    hour:"2-digit",
+                    minute:"2-digit"
+            });
+
+                const condition =
+                    data.weather[0].main;
+
+                // Weather Icons
+
+                if (condition == "Clouds") {
+                    weatherIcon.src =
+                        "https://cdn-icons-png.flaticon.com/512/414/414825.png";
+                }
+                else if (condition == "Clear") {
+                    weatherIcon.src =
+                        "https://cdn-icons-png.flaticon.com/512/869/869869.png"
+                }
+                else if (condition == "Rain") {
+                    weatherIcon.src =
+                        "https://cdn-icons-png.flaticon.com/512/1163/1163657.png"
+                }
+                else if (condition == "Drizzle") {
+                    weatherIcon.src =
+                        "https://cdn-icons-png.flaticon.com/512/3075/3075858.png"
+                }
+                else if (condition == "Snow") {
+                    weatherIcon.src =
+                        "https://cdn-icons-png.flaticon.com/512/642/642102.png"
+                }
+                else if (condition == "Mist") {
+                    weatherIcon.src =
+                        "https://cdn-icons-png.flaticon.com/512/4005/4005901.png"
+
+                }
+                else {
+                    weatherIcon.src =
+                        "https://cdn-icons-png.flaticon.com/512/1779/1779940.png"
+                }
+            }
+            catch (err) {
+                weatherBox.classList.add("hidden");
+                error.classList.remove("hidden");
+            }
+        }
+
+        // button Click
+
+        searchBtn.addEventListener("click", () => {
+            const city = cityInput.value.trim();
+            if (city !== "") {
+                getWeather(city);
+            }
+
+        });
+
+        // enter key
+
+        cityInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                searchBtn.click();
+            }
+
+        });
+
+        // default key
+
+        getWeather("lahore");
+
+        // sunset and sunrise 
+
+        const sunrise = document.getElementById("sunrise");
+        const sunset = document.getElementById("sunset");
+        const todayDate = document.getElementById("todayDate");
+        const liveTime = document.getElementById("liveTime");
+
+
+        // Date function
+
+        function showDate() {
+            const date = new Date();
+            todayDate.innerText = date.toDateString();
+        }
+
+
+        // live clock
+        function showTime() {
+            const date = new Date();
+            liveTime.innerText = date.toLocaleTimeString();
+        }
+
+        setInterval(showTime, 1000);
+
+        showTime();
+        showDate();
+    </script>
+</body>
+
+</html>
