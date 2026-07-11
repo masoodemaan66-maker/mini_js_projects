@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Small Projects</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="./src/output.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            font-family: 'poppins', sans-serif;
+        }
+
+        body {
+
+            background: linear-gradient(135deg, #4f46e5, #7c3aed, #0ea5e9);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+
+    <nav class="flex items-center justify-between px-6 py-4 bg-gray-700 text-white">
+        <a href="index.html" class="text-2xl font-bold">My projects</a>
+        <div class="flex gap-6">
+            <a href="calculator.html" class="cursor-pointer hover:text-blue-400">Calculator</a>
+            <a href="weather.html" class="cursor-pointer hover:text-blue-400">Weather</a>
+            <a href="Agecal.html" class="cursor-pointer hover:text-blue-400">Age Cal</a>
+        </div>
+    </nav>
+
+    <main class="min-h-screen flex items-center justify-center p-5">
+
+        <div class="bg-white w-full max-w-xl rounded-3xl shadow-2xl p-8">
+            <!-- Heading -->
+            <div class="text-center">
+                <h1 class="text-4xl font-bold text-gray-800">
+                    Age calculator
+                </h1>
+                <p class="text-gray-500 mt-2">
+                    Enter your date of birth to calculate your exact age.
+                </p>
+            </div>
+
+            <!-- Input Section -->
+            <div class="mt-8">
+                <label class="font-semibold text-gray-700 block mb-2">
+                    Select your Date of Birth
+                </label>
+
+                <input type="date" name="" id="dob"
+                    class="w-full border-2 border-indigo-300 rounded-xl p-4 text-lg focus:outline-none focus:ring-indigo-300">
+            </div>
+
+            <!-- button Section -->
+            <div class="grid grid-cols-2 gap-4 mt-6">
+                <button id="calculateBtn"
+                    class="bg-indigo-600 hover:bg-indigo-700 duration-300 text-white py-3 rounded-xl font-semibold">
+                    calculate Age
+                </button>
+                <button id="resetBtn"
+                    class="bg-red-500 hover:bg-red-600 duration-300 text-white py-3 rounded-xl font-semibold">
+                    Reset
+                </button>
+            </div>
+
+            <!-- Error -->
+            <p id="error" class="text-center text-red-500 mt-5 font-medium hidden">
+                Please select your Date of Birth
+            </p>
+
+            <!-- Result -->
+
+            <div id="resultBox" class="hidden mt-8">
+                <h2 class="text-center text-2xl font-bold text-gray-800 mb-6">
+                    Your Age
+                </h2>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+
+                    <!-- Years -->
+
+                    <div class="bg-indigo-100 rounded-2xl p-6 text-center shadow">
+                        <h3 id="years" class="text-4xl font-bold text-indigo-700">
+                            0
+                        </h3>
+
+                        <p class="mt-2 font-medium">
+                            Years
+                        </p>
+                    </div>
+                    <!-- months -->
+                    <div class="bg-purple-100 rounded-2xl p-6 text-center shadow">
+                        <h3 id="months" class="text-4xl font-bold text-purple-700">
+                            0
+                        </h3>
+                        <p class="mt-2 font-medium">
+                            months
+                        </p>
+                    </div>
+                    <!-- Days -->
+                    <div class="bg-cyan-100 rounded-2xl p-6 text-center shadow">
+                        <h3 id="days" class="text-4xl font-bold text-cyan-700">
+                            0
+                        </h3>
+                        <p class="mt-2 font-medium">
+                            Days
+                        </p>
+                    </div>
+                </div>
+                <!-- Extra Message -->
+                <div id="message" class="mt-8 text-center text-lg font-semibold text-gray-700">
+
+                </div>
+
+                <!-- Additional -->
+
+                <div id="extraInfo" class="hidden mt-6">
+                    <div class="bg-gray-100 rounded-xl p-4">
+                        <h3 class="text-xl font-bold text-center mb-4">
+                            More Details
+                        </h3>
+                        <div class="space-y-2 text-center">
+                            <p>
+                                Next Birthday in
+                                <span id="birthdayCountdown" class="font-bold text-indigo-600"></span>
+                            </p>
+                            <p>
+                                Total Months:
+                                <span id="totalMonths" class="font-bold text-purple-600"></span>
+                            </p>
+                            <p>
+                                Total Days:
+                                <span id="totalDays" class="font-bold text-cyan-600"></span>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Script part -->
+    <script>
+        // Get Elements
+        const dob = document.getElementById("dob");
+        const calculateBtn = document.getElementById("calculateBtn");
+        const resetBtn = document.getElementById("resetBtn");
+        const error = document.getElementById("error");
+        const resultBox = document.getElementById("resultBox");
+        const yearsElement = document.getElementById("years");
+        const monthsElement = document.getElementById("months");
+        const daysElement = document.getElementById("days");
+        const message = document.getElementById("message");
+         const extraInfo = document.getElementById("extraInfo");
+          const birthdayCountdown = document.getElementById("birthdayCountdown");
+           const totalMonths = document.getElementById("totalMonths");
+            const totalDays = document.getElementById("totalDays");
+
+
+
+        // calculate button
+        calculateBtn.addEventListener("click", calculateAge);
+
+        // Extra section
+   
+
+        // reset button
+        resetBtn.addEventListener("click", resetAge);
+
+        extraInfo.classList.add("hidden");
+        birthdayCountdown.innerText = "";
+        totalMonths.innerText = "";
+          totalDays.innerText = "";
+
+        // function
+        function calculateAge() {
+            if (dob.value === "") {
+                error.classList.remove("hidden");
+                resultBox.classList.add("hidden");
+                return;
+            }
+            error.classList.add("hidden");
+
+            const birthDate = new Date(dob.value);
+            const today = new Date();
+
+            if (birthDate > today) {
+                error.innerText = "Date of Birth cannot be in the future";
+                error.classList.remove("hidden");
+                resultBox.classList.add("hidden");
+                return
+            }
+
+            error.innerText = "";
+            let years = today.getFullYear() - birthDate.getFullYear();
+            let months = today.getMonth() - birthDate.getMonth();
+            let days = today.getDate() - birthDate.getDate();
+
+            if (days < 0) {
+                months--;
+                const lastMonths = new Date(
+                    today.getFullYear(),
+                    today.getMonth(),
+                    0
+                ).getDate();
+                days += lastMonths;
+            }
+
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+            yearsElement.innerText = years;
+            monthsElement.innerText = months;
+            daysElement.innerText = days;
+            resultBox.classList.remove("hidden");
+
+            message.innerHTML = `You are <span class="text-indigo-600">${years}</span> years,
+         <span class="text-purple-600">${months}</span> months and
+         <span class="text-cyan-600">${days}</span> days old`;
+
+
+         
+             extraInfo.classList.remove("hidden");
+
+        // total months
+        totalMonths.innerText = years * 12 + months;
+
+        // total days
+        const totalAgeDays = Math.floor(
+            (today - birthDate) / (1000 * 60 * 60 * 24)
+        );
+
+        totalDays.innerText = totalAgeDays;
+
+        // Next Birthday
+        let nextBirthday = new Date(
+            today.getFullYear(),
+            birthDate.getMonth(),
+            birthDate.getDate()
+        );
+
+        if (nextBirthday < today){
+            nextBirthday.setFullYear(today.getFullYear() + 1);
+        }
+
+        const remainingDays = Math.ceil(
+            (nextBirthday - today) / (1000 * 60 * 60 *24)
+        );
+        birthdayCountdown.innerText = remainingDays + "Days"
+        
+        }
+
+        // reset
+        function resetAge() {
+            dob.value = "";
+            yearsElement.innerText = "0";
+            monthsElement.innerText = "0";
+            daysElement.innerText = "0";
+            message.innerHTML = "";
+            resultBox.classList.add("hidden");
+            error.classList.add("hidden");
+        }
+    </script>
+</body>
+
+</html>
