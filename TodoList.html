@@ -13,16 +13,89 @@
     <div class="bg-black p-6 rounded-xl shadow-xl w-96">
         <h1 class=" text-white text-3xl font-bold mb-5 text-center">Todo List</h1>
         <div class="flex gap-2 mb-5">
-            <input type="text" placeholder="Enter Todo"
+            <input id="todoInput" type="text" placeholder="Enter Todo"
                 class="flex-1 border border-gray-300 rounded px-3 py-2 outline-none">
-            <button class="bg-yellow-300 text-black px-4 py-2 rounded-full hover:bg-yellow-200">Add Todo</button>
+            <button id="addBtn"
+                class="bg-yellow-300 text-black px-4 py-2 rounded-full border-2 border-transparent hover:bg-black hover:text-yellow-300  hover:border-yellow-300">Add
+                Todo</button>
         </div>
-        <div class="flex text-white justify-between items-center border-b pb-2">
-            <span>°  Apple</span>
-            <button class="bg-amber-300 text-black px-3 py-1 rounded-full hover:bg-yellow-200">Delete</button>
+        <div id="todoList" class="mt-4 space-y-3">
 
         </div>
     </div>
- 
+
+
+    <script>
+        const input = document.getElementById("todoInput");
+        const button = document.getElementById("addBtn");
+        const List = document.getElementById("todoList");
+
+        function saveTodos() {
+            let todos = [];
+            document.querySelectorAll("#todoList span").forEach(item => {
+                todos.push(item.innerText.replace("° ", ""));
+            });
+            localStorage.setItem("todos", JSON.stringify(todos));
+
+           
+          
+        }
+        let storedTodos = JSON.parse(localStorage.getItem("todos")) || [];
+
+        storedTodos.forEach(text => {
+            console.log(text);
+            let todo = document.createElement("div");
+            todo.className =
+                "flex flex-row w-full items-start gap-24 border-b pb-2 text-white mb-2";
+            todo.innerHTML = `
+            <span>° ${text}</span>
+
+            <button class="bg-yellow-300 text-black px-5 py-1 rounded-full hover:bg-yellow-200">
+                Delete 
+                </button> `;
+            todo.querySelector("button").addEventListener("click", function () {
+                todo.remove();
+                saveTodos();
+
+            });
+             List.appendChild(todo);
+        });
+      
+
+
+            button.addEventListener("click", function () {
+                let text = input.value.trim();
+                if (text === "") {
+                    alert("Please enter a todo!");
+                    return;
+                }
+
+                let todo = document.createElement("div");
+
+                todo.className =
+                    "flex flex-row  items-start gap-24 border-b pb-2 text-white mb-2";
+                     todo.innerHTML = `
+            <span>° ${text}</span>
+
+            <button class="bg-yellow-300 text-black px-5 py-1 rounded-full hover:bg-yellow-200">
+                Delete 
+                </button> `;
+            todo.querySelector("button").addEventListener("click", function () {
+                todo.remove();
+                saveTodos();
+
+            });
+
+            List.appendChild(todo);
+
+            saveTodos();
+            input.value ="";
+            input.focus();
+
+                
+            });
+    </script>
+
 </body>
+
 </html>
